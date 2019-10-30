@@ -15,15 +15,17 @@ for (col in c('Attrition'))
   set(all_data, j=col, value=as.factor(all_data[[col]]))
 
 # get service from the workspace to refresh the object
-service = ws$webservices$attritionr
-
+#service = ws$webservices$attritionr
+#service = $attritionpython
+webservices = ws$webservices
+webservices_string = lapply(webservices, function(s) s$name)
 
 # Define UI for slider demo app ----
 ui <- fluidPage(
   titlePanel("Score AzureML Model"),
-  
+  selectInput("model", "Pick a model:", choices = webservices_string),
   # Create a new row for the table.
-  DT::dataTableOutput("table"),
+  div(DT::dataTableOutput("table"), style = "font-size: 75%; width: 75%"),
   h4("JSON sent to service"),
   verbatimTextOutput("json"),
   h4("Result returned by service"),
@@ -53,8 +55,9 @@ server <- function(input, output) {
     } else {
       sample = all_data[input$table_rows_selected]
       sample$Attrition = NULL
+      service = webservices[[input$model]]
       result = invoke_webservice(service, toJSON(sample))
-      result
+      toString(result)
     }
   })
   
