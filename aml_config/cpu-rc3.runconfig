@@ -1,0 +1,58 @@
+{
+    "script": "python/train.py",
+    "framework": "Python",
+    "communicator": "None",
+    "target": "cpu",
+    "environment": {
+        "python": {
+            "userManagedDependencies": false,
+            "condaDependencies": {
+                "dependencies": [
+                    "python=3.6.2",
+                    "scikit-learn=0.20.3",
+                    {
+                        "pip": [
+                            "azureml-defaults",
+                            "azureml-dataprep[fuse,pandas]",
+                            "pandas",
+                            "joblib", 
+                            "sklearn_pandas",
+                            "seaborn"
+                        ]
+                    }
+                ]
+            }
+        },
+        "docker": {
+            "baseImage": "mcr.microsoft.com/azureml/base:0.2.4",
+            "enabled": true,
+            "baseImageRegistry": {
+                "address": null,
+                "username": null,
+                "password": null
+            }
+        }
+    },
+    "history": {
+        "outputCollection": true,
+        "snapshotProject": true,
+        "directoriesToWatch": [
+            "logs"
+        ]
+    }, 
+    "data": {
+        "attrition": {
+            "dataLocation": {
+                "dataset": {
+                    "id": "2f150493-ca29-4b84-b1b4-8dd67e4aba94"
+                },
+                "dataPath": null
+            },
+            "createOutputDirectories": false,
+            "mechanism": "Direct",
+            "environmentVariableName": "attrition",
+            "pathOnCompute": null,
+            "overwrite": false
+        }
+    }
+}

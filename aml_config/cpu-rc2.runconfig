@@ -1,0 +1,39 @@
+{
+    "script": "python/train.py",
+    "framework": "Python",
+    "communicator": "None",
+    "target": "cpu",
+    "environment": {
+        "python": {
+            "userManagedDependencies": false,
+            "condaDependencies": {
+                "dependencies": [
+                    "python=3.6.2",
+                    "scikit-learn=0.20.3",
+                    {
+                        "pip": [
+                            "azureml-defaults",
+                            "pandas"
+                        ]
+                    }
+                ]
+            }
+        },
+        "docker": {
+            "baseImage": "mcr.microsoft.com/azureml/base:0.2.4",
+            "enabled": true,
+            "baseImageRegistry": {
+                "address": null,
+                "username": null,
+                "password": null
+            }
+        }
+    },
+    "history": {
+        "outputCollection": true,
+        "snapshotProject": false,
+        "directoriesToWatch": [
+            "logs"
+        ]
+    }
+}

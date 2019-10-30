@@ -1,0 +1,11 @@
+name: project_environment
+dependencies:
+  - python=3.6.2
+  - pip:
+    - azureml-defaults
+    - scikit-learn==0.20.3
+    - numpy
+    - pandas
+    - sklearn-pandas
+    - inference-schema[numpy-support]
+    - joblib
