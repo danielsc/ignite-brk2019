@@ -7,16 +7,15 @@ library(jsonlite)
 library(data.table)
 
 ws <- load_workspace_from_config()
+
+## Get data to use as prediction rows
 all_data <- fread('../data/IBM-Employee-Attrition.csv',stringsAsFactors = TRUE)
 # remove useless fields 
 all_data = within(all_data, rm(EmployeeCount, Over18, StandardHours, EmployeeNumber))
 # make sure attrition is a factor
-for (col in c('Attrition')) 
-  set(all_data, j=col, value=as.factor(all_data[[col]]))
+all_data$Attrition = as.factor(all_data$Attrition)
 
 # get service from the workspace to refresh the object
-#service = ws$webservices$attritionr
-#service = $attritionpython
 webservices = ws$webservices
 webservices_string = lapply(webservices, function(s) s$name)
 
@@ -66,7 +65,3 @@ server <- function(input, output) {
 
 # Create Shiny app ----
 shinyApp(ui, server)
-
-
-
-

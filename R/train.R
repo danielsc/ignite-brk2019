@@ -4,10 +4,10 @@
 library("azuremlsdk")
 library("caret")
 library("optparse")
-library('data.table')
+#library('data.table')
 
 options <- list(
-    make_option(c("-d", "--data"), default='../data/IBM-Employee-Attrition.csv')
+  make_option(c("-d", "--data"), default='../data/IBM-Employee-Attrition.csv')
 )
 
 opt_parser <- OptionParser(option_list = options)
@@ -18,11 +18,13 @@ print(opt$data)
 all_data <- fread(file.path(opt$data),stringsAsFactors = TRUE)
 # remove useless fields 
 all_data = within(all_data, rm(EmployeeCount, Over18, StandardHours, EmployeeNumber))
-# make sure attrition is a factor
-for (col in c('Attrition')) 
-  set(all_data, j=col, value=as.factor(all_data[[col]]))
 
-#all_data$Attrition = as.factor(all_data$Attrition)
+# make sure attrition is a factor
+
+#for (col in c('Attrition')) 
+#  set(all_data, j=col, value=as.factor(all_data[[col]]))
+
+all_data$Attrition = as.factor(all_data$Attrition)
 summary(all_data)
 
 in_train <- createDataPartition(y = all_data$Attrition, p = .8, list = FALSE)
@@ -52,6 +54,5 @@ log_metric_to_run('Accuracy', conf_matrix$overall["Accuracy"], current_run)
 dir.create('outputs', showWarnings = FALSE)
 saveRDS(SVModel, file = "./outputs/model.rds")
 message("Model saved")
-
 
 

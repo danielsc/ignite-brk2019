@@ -1,7 +1,8 @@
 # run setup.R to setup workspace for the first time
 # set working directory to current file location prior to running this script
-library("azuremlsdk")
+library(azuremlsdk)
 
+# Load saved workspace
 ws <- load_workspace_from_config()
 
 ds <- get_default_datastore(ws)
@@ -37,7 +38,9 @@ run <- submit_experiment(exp, est)
 view_run_details(run)
 wait_for_run_completion(run, show_output = TRUE)
 
-metrics <- get_run_metrics(run)
+
+oldrun <- get_run(exp, "train-r-script-on-amlcompute_1572478235_dc7c2f09") # run 2
+metrics <- get_run_metrics(oldrun)
 metrics
 
 # delete cluster

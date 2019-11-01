@@ -3,7 +3,6 @@
 
 library("azuremlsdk")
 library("jsonlite")
-library("data.table")
 
 ws <- load_workspace_from_config()
 
@@ -23,7 +22,7 @@ deployment_config <- aci_webservice_deployment_config(cpu_cores = 1,
 
 # deploy the webservice
 service <- deploy_model(ws, 
-                        'attritionr', 
+                        'attritionr3', 
                         list(model), 
                         inference_config, 
                         deployment_config)
@@ -33,24 +32,22 @@ cat(service$get_logs())
 # If you encounter any issue in deploying the webservice, please visit
 # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-troubleshoot-deployment
 
-all_data <- fread('../data/IBM-Employee-Attrition.csv',stringsAsFactors = TRUE)
+all_data <- read.csv('../data/IBM-Employee-Attrition.csv',stringsAsFactors = TRUE)
 # remove useless fields 
 all_data = within(all_data, rm(EmployeeCount, Over18, StandardHours, EmployeeNumber))
 # make sure attrition is a factor
-for (col in c('Attrition')) 
-  set(all_data, j=col, value=as.factor(all_data[[col]]))
+all_data$Attrition = as.factor(all_data$Attrition)
 
 # sample 10 records
-sample = all_data[sample(.N, 10)]
+sample = all_data[sample(1:nrow(all_data), 10), ]
 
 sample_y = sample$Attrition
-sample[, Attrition := NULL]
+sample[, "Attrition"] = NULL
 sample
 
-# get service from the workspace to refresh the object
+# get already-deployed "attritionr" service from the workspace to refresh the object
 service = ws$webservices$attritionr
 
 predicted_val <- invoke_webservice(service, toJSON(sample))
 predicted_val
-
 
