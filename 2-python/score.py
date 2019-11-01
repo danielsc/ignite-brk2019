@@ -19,4 +19,4 @@ def run(raw_data):
     # Make prediction
     predictions = original_model.predict_proba(data)
     # You can return any data type as long as it is JSON-serializable
-    return predictions.tolist()
+    return [row[1] for row in predictions]
