@@ -36,7 +36,8 @@ server <- function(input, output) {
   
   # Filter data based on selections
   output$table <- DT::renderDataTable(all_data,
-                                      selection = 'single')
+                                      selection = 'single',
+                                      options=list(pageLength=5))
   
   output$json <- renderText({
     if (is.null(input$table_rows_selected)) {
