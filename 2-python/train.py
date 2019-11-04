@@ -12,7 +12,7 @@ import os
 import pandas as pd
 
 # +
-from azureml.core import Run, Workspace, Experiment
+from azureml.core import Run, Workspace, Experiment, Dataset
 # Check core SDK version number
 import azureml.core
 
@@ -31,12 +31,13 @@ if(run.id.startswith("OfflineRun")):
     experiment = Experiment(ws, "Train-Interactive")
     is_remote_run = False
     run = experiment.start_logging(outputs=None, snapshot_directory=".")
-    attritionData = ws.datasets['IBM-Employee-Attrition'].to_pandas_dataframe()
+    ds = ws.datasets['IBM-Employee-Attrition']
 else:
     ws = run.experiment.workspace
-    attritionData = run.input_datasets['attrition'].to_pandas_dataframe()
+    ds = run.input_datasets['attrition']
     is_remote_run = True
 
+attritionData = ds.to_pandas_dataframe()
 print(attritionData.head())
 # -
 
@@ -125,14 +126,31 @@ joblib.dump(value=clf, filename=model_file_name)
 
 # register the model with the model management service for later use
 run.upload_file(model_file_name, model_file_name)
+# -
+
+input_dataset = ds.take(100).drop_columns('Attrition')
+output_dataset = ds.take(100).keep_columns('Attrition')
+
+# +
+from azureml.core import Model
+from azureml.core.resource_configuration import ResourceConfiguration
+
 azureml_model = run.register_model(model_name='attrition_python',
-                                    model_path=model_file_name)
+                                   model_path=model_file_name,
+                                   description='Logistic regression Scikit-Learn model for Attrition prediction.',
+                                   tags={'area': 'attrition', 'type': 'classification'},
+                                   datasets=[(Dataset.Scenario.TRAINING,ds)])
 
+print('Name:', azureml_model.name)
+print('Version:', azureml_model.version)
+# # +
 
-reloaded = joblib.load(model_file_name)
 
 if not is_remote_run:
     run.complete()
 
 print('completed')
+
+# -
+
 

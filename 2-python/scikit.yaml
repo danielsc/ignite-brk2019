@@ -7,5 +7,8 @@ dependencies:
     - numpy
     - pandas
     - sklearn-pandas
-    - inference-schema[numpy-support]
+    - inference-schema[numpy-support,pandas-support]
     - joblib
+    - azureml-dataprep[fuse,pandas]
+    - matplotlib
+    - seaborn
