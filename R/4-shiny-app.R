@@ -1,5 +1,6 @@
-# Load the ggplot2 package which provides
-# the 'mpg' dataset.
+## Shiny app to test predictions of all deployed
+## attrition models
+## Try running this in your local environment!
 library(ggplot2)
 library(shiny)
 library(azuremlsdk)

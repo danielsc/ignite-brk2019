@@ -22,7 +22,7 @@ deployment_config <- aci_webservice_deployment_config(cpu_cores = 1,
 
 # deploy the webservice
 service <- deploy_model(ws, 
-                        'attritionr3', 
+                        'attritionr4', 
                         list(model), 
                         inference_config, 
                         deployment_config)

@@ -1,5 +1,5 @@
+# Do not let @jennybryan see this
 setwd("/home/azureuser/cloudfiles/code/ignite-brk2019/R")
-
 
 library(azuremlsdk)
 library(ggplot2)
@@ -15,7 +15,6 @@ mc = attrition$to_csv_files()$mount()
 mc$start()
 csv_file = paste(mc$mount_point, 'part-00000', sep = '/')
 df = read.csv(csv_file)
-#df = fread(file=csv_file)
 mc$stop()
 
 ## Clean up imported data
